@@ -226,3 +226,39 @@ Em caso de problemas:
 **Última atualização**: Dezembro 2024  
 **Versão**: 1.0.0
 
+
+
+## 🆕 Novos Testes (v1.1)
+
+### Teste 5: Entrada de Texto para Opções Iniciais
+1. Digite "cadastro" ou "ainda não sou cliente"
+2. **Resultado esperado**: Inicia fluxo de cadastro
+3. Digite "já sou cliente" ou "1"
+4. **Resultado esperado**: Solicita e-mail
+
+### Teste 6: Entrada de Texto no Menu de Cliente
+1. Complete um cadastro
+2. No menu de cliente, digite:
+   - "boleto" → Deve reconhecer como "2a via do boleto"
+   - "problemas" → Deve reconhecer como "Problemas no acesso"
+   - "atendente" → Deve reconhecer como "Falar com atendente"
+   - "sair" → Deve reconhecer como "Encerrar conversa"
+
+### Teste 7: Confirmação de Endereço por Texto
+1. Complete cadastro até o CEP
+2. Digite "sim" ou "s" → Deve confirmar endereço
+3. OU digite "não" ou "n" → Deve solicitar CEP novamente
+
+### Teste 8: Atalhos Numéricos
+1. Digite "1" no estado inicial → "Já sou cliente"
+2. Digite "2" no estado inicial → "Ainda não sou cliente"
+3. No menu de cliente:
+   - "1" → 2a via do boleto
+   - "2" → Problemas no acesso
+   - "3" → Falar com atendente
+   - "4" → Encerrar conversa
+
+### Teste 9: Texto Não Reconhecido
+1. Digite texto aleatório em qualquer estado com opções
+2. **Resultado esperado**: Mensagem de erro com sugestões
+

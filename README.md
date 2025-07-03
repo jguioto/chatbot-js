@@ -158,3 +158,41 @@ Projeto desenvolvido como parte de um desafio técnico para vaga de desenvolvedo
 
 Este projeto é de uso livre para fins educacionais e de demonstração.
 
+
+
+## 🆕 Novas Funcionalidades (v1.1)
+
+### Entrada de Texto para Opções
+O chatbot agora aceita tanto cliques nos botões quanto entrada de texto para todas as opções disponíveis:
+
+#### Estado Inicial
+- **Botões**: "Já sou cliente" / "Ainda não sou cliente"
+- **Texto aceito**: 
+  - "já sou cliente", "sou cliente", "1"
+  - "ainda não sou cliente", "não sou cliente", "cadastro", "2"
+
+#### Menu de Cliente
+- **Botões**: "2a via do boleto", "Problemas no acesso", "Falar com atendente", "Encerrar conversa"
+- **Texto aceito**:
+  - "2a via", "segunda via", "boleto", "1"
+  - "problemas", "problema", "acesso", "2"
+  - "falar", "atendente", "humano", "3"
+  - "encerrar", "sair", "tchau", "bye", "4"
+
+#### Confirmação de Endereço
+- **Botões**: "Sim" / "Não"
+- **Texto aceito**:
+  - "sim", "correto", "certo", "s", "1"
+  - "não", "nao", "errado", "incorreto", "n", "2"
+
+### Normalização de Texto
+- Remove acentos automaticamente
+- Ignora maiúsculas/minúsculas
+- Remove pontuação
+- Aceita números como atalhos (1, 2, 3, 4)
+
+### Tratamento de Erros
+- Mensagens claras quando o texto não é reconhecido
+- Sugestões de opções válidas
+- Fallback para uso dos botões
+
