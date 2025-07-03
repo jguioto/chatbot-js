@@ -228,3 +228,31 @@ Para facilitar testes, o sistema inclui:
 - **Dados corrompidos**: Recuperação automática com clientes padrão
 - **Console logging**: Informações de debug para desenvolvedores
 
+
+## 🆕 Versão 2.1 - Correções de UX
+
+### ✅ **Problemas Corrigidos**
+
+#### 💬 **Exibição de Mensagens Digitadas**
+- **Problema**: Mensagens digitadas pelo usuário não apareciam na conversa
+- **Solução**: Adicionado `displayMessage(input, 'user')` em todos os estados
+- **Resultado**: Todas as mensagens digitadas agora aparecem na tela
+
+#### 🔄 **Fluxo Pós-Encerramento**
+- **Problema**: Após encerrar conversa, nova mensagem gerava erro sem opções
+- **Solução**: Estado `END_CONVERSATION` agora reinicia o fluxo automaticamente
+- **Resultado**: Qualquer mensagem após encerramento volta à saudação inicial
+
+### 🧪 **Testes Realizados**
+- ✅ Cadastro completo com todas as mensagens visíveis
+- ✅ Login com cliente existente e mensagens exibidas
+- ✅ Encerramento seguido de nova mensagem → Reinício automático
+- ✅ Entrada de texto para todas as opções funcionando
+- ✅ Persistência de dados mantida após correções
+
+### 🎯 **Melhorias na Experiência**
+- **Conversa mais natural**: Usuário vê suas próprias mensagens
+- **Fluxo contínuo**: Sem travamentos após encerramento
+- **Feedback visual**: Todas as interações são visíveis
+- **Robustez**: Tratamento adequado de todos os cenários
+

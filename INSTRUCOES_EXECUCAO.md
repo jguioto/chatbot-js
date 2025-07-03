@@ -321,3 +321,55 @@ Em caso de problemas:
 6. **Finalize** novamente
 7. **Resultado esperado**: Todas as interações com saudação personalizada
 
+
+## 🆕 Novos Testes v2.1 - Correções de UX
+
+### Teste 18: Exibição de Mensagens Digitadas
+1. Inicie um cadastro digitando "cadastro"
+2. **Verifique**: Mensagem "Ainda não sou cliente" aparece na conversa
+3. Digite seu nome: "João Teste"
+4. **Verifique**: Nome aparece na conversa como mensagem do usuário
+5. Continue com e-mail, telefone e CEP
+6. **Resultado esperado**: Todas as mensagens digitadas são visíveis
+
+### Teste 19: Fluxo Pós-Encerramento
+1. Complete um login ou cadastro
+2. Acesse o menu de cliente
+3. Digite "encerrar" para finalizar
+4. **Aguarde**: Mensagem de despedida personalizada
+5. Digite qualquer mensagem: "oi", "olá", "teste"
+6. **Resultado esperado**: 
+   - Mensagem digitada aparece na conversa
+   - Bot responde "Olá novamente! Vamos começar uma nova conversa"
+   - Exibe saudação inicial com opções
+
+### Teste 20: Entrada de Texto Completa
+1. Digite "já sou cliente" (em vez de clicar)
+2. **Verifique**: Mensagem aparece na conversa
+3. Digite um e-mail válido
+4. **Verifique**: E-mail aparece na conversa
+5. No menu, digite "boleto"
+6. **Verifique**: "2a via do boleto" aparece na conversa
+7. **Resultado esperado**: Todas as entradas de texto são visíveis
+
+### Teste 21: Confirmação de Endereço
+1. Inicie cadastro e chegue até o CEP
+2. Digite um CEP válido: "01310100"
+3. **Verifique**: CEP aparece na conversa
+4. Digite "sim" para confirmar endereço
+5. **Verifique**: "Sim" aparece na conversa
+6. **Resultado esperado**: Confirmação visível e cadastro concluído
+
+### Teste 22: Robustez do Sistema
+1. **Encerre** uma conversa
+2. **Digite** várias mensagens seguidas: "oi", "teste", "olá"
+3. **Resultado esperado**: Cada mensagem reinicia o fluxo corretamente
+4. **Teste** entrada inválida após reinício
+5. **Resultado esperado**: Tratamento de erro adequado com opções visíveis
+
+### Teste 23: Persistência Após Correções
+1. **Cadastre** um novo cliente com as correções
+2. **Feche** o navegador
+3. **Reabra** e faça login
+4. **Resultado esperado**: Dados persistidos e saudação personalizada funcionando
+
