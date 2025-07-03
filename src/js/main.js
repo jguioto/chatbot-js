@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ASK_EMAIL: {
             message: 'Por favor, digite seu e-mail de cadastro.',
             handleInput: (email) => {
+                displayMessage(email, 'user'); // Exibe a mensagem digitada
                 if (isValidEmail(email)) {
                     const client = clients.find(c => c.email === email);
                     if (client) {
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ASK_NAME: {
             message: 'Para começarmos, qual é o seu nome?',
             handleInput: (name) => {
+                displayMessage(name, 'user'); // Exibe a mensagem digitada
                 if (name.trim() !== '') {
                     clients.push({ name });
                     currentState = 'ASK_NEW_EMAIL';
@@ -126,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ASK_NEW_EMAIL: {
             message: 'Agora, digite seu melhor e-mail.',
             handleInput: (email) => {
+                displayMessage(email, 'user'); // Exibe a mensagem digitada
                 if (isValidEmail(email)) {
                     // Verifica se e-mail já existe
                     const existingClient = clients.find(c => c.email === email);
@@ -152,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ASK_PHONE: {
             message: 'Qual o seu telefone com DDD?',
             handleInput: (phone) => {
+                displayMessage(phone, 'user'); // Exibe a mensagem digitada
                 if (isValidPhone(phone)) {
                     clients[clients.length - 1].phone = phone;
                     currentState = 'ASK_CEP';
@@ -164,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ASK_CEP: {
             message: 'Por favor, digite seu CEP para validarmos seu endereço.',
             handleInput: (cep) => {
+                displayMessage(cep, 'user'); // Exibe a mensagem digitada
                 if (isValidCep(cep)) {
                     validateCep(cep);
                 } else {
@@ -211,7 +216,18 @@ document.addEventListener('DOMContentLoaded', () => {
             message: 'Cadastro concluído com sucesso!',
         },
         END_CONVERSATION: {
-            message: 'Obrigado por usar o Chatbot Neppo! Até mais.'
+            message: 'Obrigado por usar o Chatbot Neppo! Até mais.',
+            handleInput: (input) => {
+                // Qualquer mensagem após encerramento volta para o início
+                displayMessage(input, 'user'); // Exibe a mensagem digitada
+                displayMessage('Olá novamente! Vamos começar uma nova conversa.', 'bot');
+                currentState = 'INITIAL';
+                currentClient = null; // Limpa cliente atual
+                setTimeout(() => {
+                    displayMessage(stateMachine[currentState].message, 'bot');
+                    displayOptions(stateMachine[currentState].options);
+                }, 1000);
+            }
         }
     };
 
