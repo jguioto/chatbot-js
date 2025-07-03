@@ -262,3 +262,62 @@ Em caso de problemas:
 1. Digite texto aleatório em qualquer estado com opções
 2. **Resultado esperado**: Mensagem de erro com sugestões
 
+
+## 🆕 Novos Testes v2.0 - Persistência e Personalização
+
+### Teste 10: Clientes Pré-Cadastrados
+1. Clique em "Já sou cliente"
+2. Digite: `joao.silva@email.com`
+3. **Resultado esperado**: "Olá, João! Bem-vindo(a) de volta!"
+4. Teste outros e-mails:
+   - `maria.santos@email.com` → "Olá, Maria!"
+   - `pedro.oliveira@email.com` → "Olá, Pedro!"
+   - `ana.costa@email.com` → "Olá, Ana!"
+
+### Teste 11: Persistência de Dados
+1. Cadastre um novo cliente completo
+2. **Feche o navegador** completamente
+3. **Reabra** e acesse o chatbot
+4. Tente fazer login com o e-mail cadastrado
+5. **Resultado esperado**: Login bem-sucedido com saudação personalizada
+
+### Teste 12: Saudação Personalizada
+1. Faça login com qualquer cliente
+2. **Observe**: Mensagem personalizada no menu
+3. Escolha "Encerrar conversa"
+4. **Resultado esperado**: "Obrigado por usar o Chatbot Neppo, [Nome]! Até mais."
+
+### Teste 13: E-mail Duplicado
+1. Inicie cadastro de novo cliente
+2. Digite nome: "Teste Duplicado"
+3. Digite e-mail já existente: `joao.silva@email.com`
+4. **Resultado esperado**: "Este e-mail já está cadastrado. Redirecionando..."
+5. **Deve**: Ir direto para menu de cliente do João
+
+### Teste 14: Persistência Após Recarregar
+1. Cadastre um cliente novo
+2. **Recarregue a página** (F5)
+3. Tente login com o e-mail do cliente recém-cadastrado
+4. **Resultado esperado**: Login bem-sucedido
+
+### Teste 15: Console de Debug
+1. Abra o **Console do Navegador** (F12)
+2. Recarregue a página
+3. **Resultado esperado**: Lista de clientes pré-cadastrados no console
+4. Digite: `localStorage.getItem('neppo_clients')`
+5. **Resultado esperado**: JSON com todos os clientes salvos
+
+### Teste 16: Limpeza de Dados
+1. No console, digite: `localStorage.removeItem('neppo_clients')`
+2. Recarregue a página
+3. **Resultado esperado**: Volta aos 4 clientes pré-cadastrados padrão
+
+### Teste 17: Fluxo Completo com Persistência
+1. **Cadastre** um novo cliente completo
+2. **Finalize** a conversa
+3. **Recarregue** a página
+4. **Faça login** com o cliente cadastrado
+5. **Use** uma opção do menu
+6. **Finalize** novamente
+7. **Resultado esperado**: Todas as interações com saudação personalizada
+

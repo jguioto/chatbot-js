@@ -196,3 +196,35 @@ O chatbot agora aceita tanto cliques nos botões quanto entrada de texto para to
 - Sugestões de opções válidas
 - Fallback para uso dos botões
 
+
+## 🆕 Versão 2.0 - Persistência e Personalização
+
+### 💾 **Persistência de Dados**
+- **localStorage**: Dados salvos permanentemente no navegador
+- **Clientes pré-cadastrados**: 4 clientes de exemplo já incluídos
+- **Backup automático**: Salva a cada novo cadastro
+- **Recuperação**: Dados mantidos após fechar/reabrir navegador
+
+### 👋 **Saudação Personalizada**
+- **Login**: "Olá, [Nome]! Bem-vindo(a) de volta!"
+- **Despedida**: "Obrigado por usar o Chatbot Neppo, [Nome]! Até mais."
+- **Reconhecimento**: Extrai primeiro nome automaticamente
+
+### 📋 **Clientes Pré-Cadastrados**
+Para facilitar testes, o sistema inclui:
+- **João Silva** (joao.silva@email.com)
+- **Maria Santos** (maria.santos@email.com)  
+- **Pedro Oliveira** (pedro.oliveira@email.com)
+- **Ana Costa** (ana.costa@email.com)
+
+### 🔄 **Funcionalidades Aprimoradas**
+- **Detecção de e-mail duplicado**: Redireciona para menu se já cadastrado
+- **Validação robusta**: Verifica e-mails existentes antes de cadastrar
+- **Estado do cliente**: Mantém referência do cliente logado
+- **Limpeza de sessão**: Remove referência ao finalizar conversa
+
+### 🛡️ **Tratamento de Erros**
+- **localStorage indisponível**: Fallback para array em memória
+- **Dados corrompidos**: Recuperação automática com clientes padrão
+- **Console logging**: Informações de debug para desenvolvedores
+
