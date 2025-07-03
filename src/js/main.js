@@ -22,6 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayMessage(stateMachine[currentState].message, 'bot');
                     hideOptions();
                 }
+            },
+            handleInput: (input) => {
+                // Processa entrada de texto para as opções
+                const normalizedInput = normalizeText(input);
+                if (normalizedInput.includes('ja sou cliente') || normalizedInput.includes('sou cliente') || normalizedInput === '1') {
+                    displayMessage('Já sou cliente', 'user');
+                    stateMachine[currentState].handleOption('Já sou cliente');
+                } else if (normalizedInput.includes('ainda nao sou cliente') || normalizedInput.includes('nao sou cliente') || normalizedInput.includes('cadastro') || normalizedInput === '2') {
+                    displayMessage('Ainda não sou cliente', 'user');
+                    stateMachine[currentState].handleOption('Ainda não sou cliente');
+                } else {
+                    displayMessage('Desculpe, não entendi. Por favor, escolha uma das opções: "Já sou cliente" ou "Ainda não sou cliente".', 'bot');
+                }
             }
         },
         ASK_EMAIL: {
@@ -61,6 +74,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         displayMessage(stateMachine[currentState].message, 'bot');
                         hideOptions();
                     }, 1500);
+                }
+            },
+            handleInput: (input) => {
+                // Processa entrada de texto para as opções do menu
+                const normalizedInput = normalizeText(input);
+                if (normalizedInput.includes('2a via') || normalizedInput.includes('segunda via') || normalizedInput.includes('boleto') || normalizedInput === '1') {
+                    displayMessage('2a via do boleto', 'user');
+                    stateMachine[currentState].handleOption('2a via do boleto');
+                } else if (normalizedInput.includes('problemas') || normalizedInput.includes('problema') || normalizedInput.includes('acesso') || normalizedInput === '2') {
+                    displayMessage('Problemas no acesso', 'user');
+                    stateMachine[currentState].handleOption('Problemas no acesso');
+                } else if (normalizedInput.includes('falar') || normalizedInput.includes('atendente') || normalizedInput.includes('humano') || normalizedInput === '3') {
+                    displayMessage('Falar com atendente', 'user');
+                    stateMachine[currentState].handleOption('Falar com atendente');
+                } else if (normalizedInput.includes('encerrar') || normalizedInput.includes('sair') || normalizedInput.includes('tchau') || normalizedInput.includes('bye') || normalizedInput === '4') {
+                    displayMessage('Encerrar conversa', 'user');
+                    stateMachine[currentState].handleOption('Encerrar conversa');
+                } else {
+                    displayMessage('Desculpe, não entendi. Por favor, escolha uma das opções: "2a via do boleto", "Problemas no acesso", "Falar com atendente" ou "Encerrar conversa".', 'bot');
                 }
             }
         },
@@ -126,6 +158,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentState = 'ASK_CEP';
                     displayMessage('Por favor, digite seu CEP novamente.', 'bot');
                 }
+            },
+            handleInput: (input) => {
+                // Processa entrada de texto para confirmação de endereço
+                const normalizedInput = normalizeText(input);
+                if (normalizedInput.includes('sim') || normalizedInput.includes('correto') || normalizedInput.includes('certo') || normalizedInput === 's' || normalizedInput === '1') {
+                    displayMessage('Sim', 'user');
+                    stateMachine[currentState].handleOption('Sim');
+                } else if (normalizedInput.includes('nao') || normalizedInput.includes('não') || normalizedInput.includes('errado') || normalizedInput.includes('incorreto') || normalizedInput === 'n' || normalizedInput === '2') {
+                    displayMessage('Não', 'user');
+                    stateMachine[currentState].handleOption('Não');
+                } else {
+                    displayMessage('Desculpe, não entendi. Por favor, responda "Sim" se o endereço está correto ou "Não" se está incorreto.', 'bot');
+                }
             }
         },
         REGISTER_USER: {
@@ -135,6 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
             message: 'Obrigado por usar o Chatbot Neppo! Até mais.'
         }
     };
+
+    function normalizeText(text) {
+        return text.toLowerCase()
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                  .replace(/[^\w\s]/g, '') // Remove pontuação
+                  .trim();
+    }
 
     function displayMessage(message, sender) {
         const messageElement = document.createElement('div');
@@ -165,9 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleUserInput() {
         const message = userInput.value.trim();
         if (message) {
-            displayMessage(message, 'user');
+            // Verifica se o estado atual tem handleInput
             if (stateMachine[currentState].handleInput) {
                 stateMachine[currentState].handleInput(message);
+            } else {
+                // Se não tem handleInput, exibe mensagem padrão
+                displayMessage(message, 'user');
+                displayMessage('Desculpe, não entendi. Por favor, use os botões disponíveis ou digite uma das opções válidas.', 'bot');
             }
             userInput.value = '';
         }
@@ -217,5 +274,4 @@ document.addEventListener('DOMContentLoaded', () => {
     displayMessage(stateMachine.INITIAL.message, 'bot');
     displayOptions(stateMachine.INITIAL.options);
 });
-
 
