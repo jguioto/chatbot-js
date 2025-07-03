@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const chatOptions = document.getElementById('chat-options');
 
-    const clients = []; // Array para armazenar clientes cadastrados
+    // Clientes pré-cadastrados e carregamento do localStorage
+    let clients = loadClients();
+    let currentClient = null; // Cliente atual logado
 
     let currentState = 'INITIAL';
 
@@ -43,8 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isValidEmail(email)) {
                     const client = clients.find(c => c.email === email);
                     if (client) {
+                        currentClient = client;
                         currentState = 'CLIENT_MENU';
-                        displayMessage(stateMachine[currentState].message, 'bot');
+                        const firstName = client.name.split(' ')[0];
+                        const personalizedMessage = `Olá, ${firstName}! ${stateMachine[currentState].message}`;
+                        displayMessage(personalizedMessage, 'bot');
                         displayOptions(stateMachine[currentState].options);
                     } else {
                         displayMessage('E-mail não encontrado. Por favor, tente novamente ou cadastre-se.', 'bot');
@@ -65,14 +70,24 @@ document.addEventListener('DOMContentLoaded', () => {
             handleOption: (option) => {
                 if (option === 'Encerrar conversa') {
                     currentState = 'END_CONVERSATION';
-                    displayMessage(stateMachine[currentState].message, 'bot');
+                    const firstName = currentClient ? currentClient.name.split(' ')[0] : '';
+                    const personalizedMessage = firstName ? 
+                        `Obrigado por usar o Chatbot Neppo, ${firstName}! Até mais.` : 
+                        stateMachine['END_CONVERSATION'].message;
+                    displayMessage(personalizedMessage, 'bot');
                     hideOptions();
+                    currentClient = null; // Limpa cliente atual
                 } else {
                     displayMessage('Essa opção é demonstrativa. Valeu!', 'bot');
                     currentState = 'END_CONVERSATION';
                     setTimeout(() => {
-                        displayMessage(stateMachine[currentState].message, 'bot');
+                        const firstName = currentClient ? currentClient.name.split(' ')[0] : '';
+                        const personalizedMessage = firstName ? 
+                            `Obrigado por usar o Chatbot Neppo, ${firstName}! Até mais.` : 
+                            stateMachine['END_CONVERSATION'].message;
+                        displayMessage(personalizedMessage, 'bot');
                         hideOptions();
+                        currentClient = null; // Limpa cliente atual
                     }, 1500);
                 }
             },
@@ -112,9 +127,23 @@ document.addEventListener('DOMContentLoaded', () => {
             message: 'Agora, digite seu melhor e-mail.',
             handleInput: (email) => {
                 if (isValidEmail(email)) {
-                    clients[clients.length - 1].email = email;
-                    currentState = 'ASK_PHONE';
-                    displayMessage(stateMachine[currentState].message, 'bot');
+                    // Verifica se e-mail já existe
+                    const existingClient = clients.find(c => c.email === email);
+                    if (existingClient) {
+                        displayMessage('Este e-mail já está cadastrado. Redirecionando para o menu de cliente...', 'bot');
+                        currentClient = existingClient;
+                        currentState = 'CLIENT_MENU';
+                        setTimeout(() => {
+                            const firstName = existingClient.name.split(' ')[0];
+                            const personalizedMessage = `Olá, ${firstName}! ${stateMachine[currentState].message}`;
+                            displayMessage(personalizedMessage, 'bot');
+                            displayOptions(stateMachine[currentState].options);
+                        }, 1500);
+                    } else {
+                        clients[clients.length - 1].email = email;
+                        currentState = 'ASK_PHONE';
+                        displayMessage(stateMachine[currentState].message, 'bot');
+                    }
                 } else {
                     displayMessage('E-mail inválido. Por favor, digite um e-mail válido.', 'bot');
                 }
@@ -149,9 +178,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (option === 'Sim') {
                     currentState = 'REGISTER_USER';
                     displayMessage(stateMachine[currentState].message, 'bot');
+                    // Salva o novo cliente no localStorage
+                    saveClients();
+                    currentClient = clients[clients.length - 1];
                     setTimeout(() => {
                         currentState = 'CLIENT_MENU';
-                        displayMessage(stateMachine[currentState].message, 'bot');
+                        const firstName = currentClient.name.split(' ')[0];
+                        const personalizedMessage = `Olá, ${firstName}! ${stateMachine[currentState].message}`;
+                        displayMessage(personalizedMessage, 'bot');
                         displayOptions(stateMachine[currentState].options);
                     }, 1500);
                 } else {
@@ -180,6 +214,61 @@ document.addEventListener('DOMContentLoaded', () => {
             message: 'Obrigado por usar o Chatbot Neppo! Até mais.'
         }
     };
+
+    // Funções de persistência de dados
+    function loadClients() {
+        try {
+            const savedClients = localStorage.getItem('neppo_clients');
+            if (savedClients) {
+                return JSON.parse(savedClients);
+            } else {
+                // Clientes pré-cadastrados para demonstração
+                const defaultClients = [
+                    {
+                        name: 'João Silva',
+                        email: 'joao.silva@email.com',
+                        phone: '11987654321',
+                        address: 'Rua das Flores, 123, Centro, São Paulo - SP'
+                    },
+                    {
+                        name: 'Maria Santos',
+                        email: 'maria.santos@email.com',
+                        phone: '11999887766',
+                        address: 'Avenida Paulista, 1000, Bela Vista, São Paulo - SP'
+                    },
+                    {
+                        name: 'Pedro Oliveira',
+                        email: 'pedro.oliveira@email.com',
+                        phone: '11955443322',
+                        address: 'Rua Augusta, 500, Consolação, São Paulo - SP'
+                    },
+                    {
+                        name: 'Ana Costa',
+                        email: 'ana.costa@email.com',
+                        phone: '11944332211',
+                        address: 'Rua Oscar Freire, 200, Jardins, São Paulo - SP'
+                    }
+                ];
+                saveClientsToStorage(defaultClients);
+                return defaultClients;
+            }
+        } catch (error) {
+            console.error('Erro ao carregar clientes:', error);
+            return [];
+        }
+    }
+
+    function saveClients() {
+        saveClientsToStorage(clients);
+    }
+
+    function saveClientsToStorage(clientsArray) {
+        try {
+            localStorage.setItem('neppo_clients', JSON.stringify(clientsArray));
+        } catch (error) {
+            console.error('Erro ao salvar clientes:', error);
+        }
+    }
 
     function normalizeText(text) {
         return text.toLowerCase()
@@ -273,5 +362,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicia a conversa
     displayMessage(stateMachine.INITIAL.message, 'bot');
     displayOptions(stateMachine.INITIAL.options);
+
+    // Exibe informações sobre clientes pré-cadastrados (apenas para demonstração)
+    console.log('Clientes pré-cadastrados para teste:');
+    clients.forEach(client => {
+        console.log(`- ${client.name} (${client.email})`);
+    });
 });
 
